@@ -74,5 +74,6 @@
     <Build Include="dbo\Store Procedures\ConsultarReservas.sql" />
     <Build Include="dbo\Store Procedures\ConsultarSalaPorId.sql" />
     <Build Include="dbo\Store Procedures\ConsultarReservaPorId.sql" />
+    <Build Include="dbo\Store Procedures\FiltrarReservas.sql" />
   </ItemGroup>
 </Project>

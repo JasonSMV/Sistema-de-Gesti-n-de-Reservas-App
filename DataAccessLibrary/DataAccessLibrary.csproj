@@ -51,6 +51,7 @@
     <Compile Include="Interfaces\IReservaRepository.cs" />
     <Compile Include="Interfaces\ISalaRepository.cs" />
     <Compile Include="Models\ReservaModel.cs" />
+    <Compile Include="Models\ReservaViewModel.cs" />
     <Compile Include="Models\SalaModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ReservaRepository.cs" />

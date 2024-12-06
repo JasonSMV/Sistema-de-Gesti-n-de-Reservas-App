@@ -1,0 +1,73 @@
+﻿@model List<DataAccessLibrary.Models.ReservaViewModel>
+
+@{
+    ViewBag.Title = "Gestion de Reservas";
+}
+
+<h2>Gestión de Reservas</h2>
+
+<p>
+    @Html.ActionLink("Crear Nueva Reserva", "Create", "Reservas", null, new { @class = "btn btn-primary" })
+</p>
+
+@Html.Partial("_Filter")
+
+<div id="reservasTableContainer">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sala</th>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var reserva in Model)
+            {
+                <tr>
+                    <td>@reserva.ID</td>
+                    <td>@reserva.NombreSala</td>
+                    <td>@reserva.FechaReserva.ToString("yyyy-MM-dd")</td>
+                    <td>@reserva.Usuario</td>
+                    <td class="grid gap-3">
+                        @Html.ActionLink("Editar", "Edit", new { id = reserva.ID }, new { @class = "btn btn-warning btn-sm" })
+                        @Html.ActionLink("Eliminar", "Delete", new { id = reserva.ID }, new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#filterForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: '@Url.Action("FiltrarReservas", "Reservas")',
+                    type: 'POST',
+                    data: formData,
+                    success: function (data)
+                    {
+  
+                        $('#reservasTableContainer').html(data);
+                    },
+                    error: function ()
+                    {
+
+                        alert('Ocurrió un error al filtrar las reservas.');
+                    }
+                });
+            });
+        });
+    </script>
+}

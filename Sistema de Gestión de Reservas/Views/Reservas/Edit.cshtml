@@ -1,0 +1,36 @@
+﻿@model DataAccessLibrary.Models.ReservaViewModel
+
+@{
+    ViewBag.Title = "Crear Reserva";
+}
+
+<h2>Editar Reserva</h2>
+
+@using (Html.BeginForm("Edit", "Reservas", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SalaID, "Sala", new { @class = "control-label" })
+        @Html.DropDownListFor(model => model.SalaID, 
+            new SelectList(ViewBag.Salas, "ID", "Nombre"), 
+            "Selecciona una sala", 
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.SalaID, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaReserva, "Fecha de Reserva", new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.FechaReserva, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+        @Html.ValidationMessageFor(model => model.FechaReserva, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Usuario, new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+}

@@ -1,0 +1,16 @@
+﻿@using (Html.BeginForm("FiltrarReservas", "Reservas", FormMethod.Post, new { id = "filterForm", @class = "form-inline" }))
+{
+    <div class="form-group">
+        @Html.Label("Sala", new { @class = "control-label" })
+        @Html.DropDownList("SalaID", new SelectList(ViewBag.Salas, "ID", "Nombre"), "Todas las salas", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.Label("Fecha Desde", new { @class = "control-label" })
+        @Html.TextBox("FechaDesde", null, new { @class = "form-control", type = "date" })
+    </div>
+    <div class="form-group">
+        @Html.Label("Fecha Hasta", new { @class = "control-label" })
+        @Html.TextBox("FechaHasta", null, new { @class = "form-control", type = "date" })
+    </div>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+}

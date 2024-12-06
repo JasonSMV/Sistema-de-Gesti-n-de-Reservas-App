@@ -9,10 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccessLibrary.Models;
 using System.Security.Cryptography;
+using DataAccessLibrary.Interfaces;
 
 namespace DataAccessLibrary.Repositories
 {
-    public class ReservaRepository
+    public class ReservaRepository : IReservaRepository
     {
 
         private readonly string connectionString;
@@ -26,20 +27,27 @@ namespace DataAccessLibrary.Repositories
 
         }
 
-        public List<ReservaModel> TraerTodas()
+        public List<ReservaViewModel> TraerTodas()
         {
             // Se manda el nombre del store procedure. 
-            return db.LoadData<ReservaModel, dynamic>("ConsultarReservas", new { }, connectionString);
+            return db.LoadData<ReservaViewModel, dynamic>("ConsultarReservas", new { }, connectionString);
         }
 
 
-        public ReservaModel TraerPorId(int id)
+        public ReservaViewModel TraerPorId(int id)
         {
 
             var parameters = new { ID = id };
-            return db.LoadData<ReservaModel, dynamic>("ConsultarReservaPorId", parameters, connectionString).FirstOrDefault();
+            return db.LoadData<ReservaViewModel, dynamic>("ConsultarReservaPorId", parameters, connectionString).FirstOrDefault();
 
-            ;
+        }
+
+        public List<ReservaViewModel> FiltrarReservas(int? salaId, DateTime? fechaDesde, DateTime? fechaHasta)
+        {
+
+            var parameters = new { SalaID = salaId, FechaDesde = fechaDesde, FechaHasta = fechaHasta};
+            return db.LoadData<ReservaViewModel, dynamic>("FiltrarReservas", parameters, connectionString);
+
         }
 
         public async Task Agregar(ReservaModel reserva)

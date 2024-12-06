@@ -1,0 +1,28 @@
+﻿@model List<DataAccessLibrary.Models.ReservaViewModel>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Sala</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reserva in Model)
+        {
+            <tr>
+                <td>@reserva.ID</td>
+                <td>@reserva.NombreSala</td>
+                <td>@reserva.FechaReserva.ToString("yyyy-MM-dd")</td>
+                <td>@reserva.Usuario</td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = reserva.ID }, new { @class = "btn btn-warning btn-sm" }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = reserva.ID }, new { @class = "btn btn-danger btn-sm" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
