@@ -10,6 +10,7 @@ namespace DataAccessLibrary.Interfaces
     public interface ISalaRepository
     {
         List<SalaModel> TraerTodas();
+        SalaModel TraerPorId(int id);
         Task Agregar(SalaModel sala);
         Task Actualizar(SalaModel sala);
         Task Borrar(int id);

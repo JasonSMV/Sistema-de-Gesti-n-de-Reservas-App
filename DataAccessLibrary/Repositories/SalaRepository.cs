@@ -29,6 +29,16 @@ namespace DataAccessLibrary.Repositories
             return db.LoadData<SalaModel, dynamic>("ConsultarSalas", new { }, connectionString);
         }
 
+        public SalaModel TraerPorId(int id)
+        {
+
+
+            var parameters = new { ID = id };
+            return db.LoadData<SalaModel, dynamic>("ConsultarSalaPorId", parameters, connectionString).FirstOrDefault();
+
+            ;
+        }
+
         public async Task Agregar(SalaModel sala)
         {
             var parameters = new
@@ -38,7 +48,7 @@ namespace DataAccessLibrary.Repositories
                 Disponibilidad = sala.Disponibilidad
             };
 
-            await db.SaveData("InsertarSala", parameters, connectionString);
+            await db.SaveData("AgregarSala", parameters, connectionString);
         }
 
         public async Task Actualizar(SalaModel sala)

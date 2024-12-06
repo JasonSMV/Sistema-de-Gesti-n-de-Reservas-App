@@ -1,0 +1,34 @@
+﻿@model DataAccessLibrary.Models.SalaModel
+
+@{
+    ViewBag.Title = "Edit Sala";
+}
+
+<h2>Editar Sala</h2>
+
+@using (Html.BeginForm("Edit", "Sala", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nombre, new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Capacidad, new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Capacidad, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Capacidad, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Disponibilidad, new { @class = "control-label" })
+        @Html.CheckBoxFor(model => model.Disponibilidad)
+    </div>
+
+    
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-secondary" })
+}

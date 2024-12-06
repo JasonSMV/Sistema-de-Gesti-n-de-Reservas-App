@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccessLibrary.Models;
+using System.Security.Cryptography;
 
 namespace DataAccessLibrary.Repositories
 {
@@ -15,66 +16,74 @@ namespace DataAccessLibrary.Repositories
     {
 
         private readonly string connectionString;
+        private readonly SqlDataAccess db;
+
 
         public ReservaRepository()
         {
             connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            db = new SqlDataAccess();
+
         }
 
-        public IEnumerable<ReservaModel> TraerTodas()
+        public List<ReservaModel> TraerTodas()
         {
-            using(IDbConnection db = new SqlConnection(connectionString))
-            {
-                return db.Query<ReservaModel>("ConsultarReservas", commandType: CommandType.StoredProcedure).ToList();
-            }
+            // Se manda el nombre del store procedure. 
+            return db.LoadData<ReservaModel, dynamic>("ConsultarReservas", new { }, connectionString);
         }
 
-        public void Agregar(ReservaModel reserva)
-        {
-            using(IDbConnection db = new SqlConnection(connectionString))
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@SalaID", reserva.SalaID);
-                parameters.Add("@FechaReserva", reserva.FechaReserva);
-                parameters.Add("@Usuario", reserva.Usuario);
 
-                db.Execute("InsertarReserva", parameters, commandType: CommandType.StoredProcedure);
-            }
+        public ReservaModel TraerPorId(int id)
+        {
+
+            var parameters = new { ID = id };
+            return db.LoadData<ReservaModel, dynamic>("ConsultarReservaPorId", parameters, connectionString).FirstOrDefault();
+
+            ;
         }
 
-        public void Actualizar(ReservaModel reserva)
+        public async Task Agregar(ReservaModel reserva)
         {
-            using(IDbConnection db = new SqlConnection(connectionString))
+            var parameters = new
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@ID", reserva.ID);
-                parameters.Add("@SalaID", reserva.SalaID);
-                parameters.Add("@FechaReserva", reserva.FechaReserva);
-                parameters.Add("@Usuario", reserva.Usuario);
+                Usuario = reserva.Usuario,
+                SalaID = reserva.SalaID,
+                FechaReserva = reserva.FechaReserva
+            };
 
-                db.Execute("ActualizarReserva", parameters, commandType: CommandType.StoredProcedure);
-            }
+            await db.SaveData("AgregarReserva", parameters, connectionString);
         }
 
-        public void Borrar(int id)
+        public async Task Actualizar(ReservaModel reserva)
         {
-            using(IDbConnection db = new SqlConnection(connectionString))
+            var parameters = new
             {
-                db.Execute("EliminarReserva", new { ID = id }, commandType: CommandType.StoredProcedure);
-            }
+                ID = reserva.ID,
+                Usuario = reserva.Usuario,
+                SalaID = reserva.SalaID,
+                FechaReserva = reserva.FechaReserva
+            };
+
+            await db.SaveData("ActualizarReserva", parameters, connectionString);
+        }
+
+        public async Task Borrar(int id)
+        {
+            await db.SaveData("EliminarReserva", new { ID = id }, connectionString);
         }
 
         public bool EstaDisponible(int salaID, DateTime fechaReserva)
         {
-            using(IDbConnection db = new SqlConnection(connectionString))
-            {
-                var result = db.QuerySingle<int>(
-                    "ValidarDisponibilidad",
-                    new { SalaID = salaID, FechaReserva = fechaReserva },
-                    commandType: CommandType.StoredProcedure
-                );
-                return result == 1; // 1 significa disponible
-            }
+
+            var parameters = new { SalaID = salaID, FechaReserva = fechaReserva };
+
+            int resultado = db.LoadData<int, dynamic>("ValidarDisponibilidad", parameters, connectionString).FirstOrDefault();
+
+            return resultado == 1;
+
         }
+
+
+
     }
 }

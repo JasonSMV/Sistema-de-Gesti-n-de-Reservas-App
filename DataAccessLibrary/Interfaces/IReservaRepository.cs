@@ -10,6 +10,7 @@ namespace DataAccessLibrary.Interfaces
     public interface IReservaRepository
     {
         List<ReservaModel> TraerTodas();
+        ReservaModel TraerPorId(int id);
         Task Agregar(ReservaModel sala);
         Task Actualizar(ReservaModel sala);
         Task Borrar(int id);

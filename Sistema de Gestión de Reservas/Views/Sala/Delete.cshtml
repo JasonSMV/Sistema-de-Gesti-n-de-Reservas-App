@@ -1,0 +1,40 @@
+﻿@model DataAccessLibrary.Models.SalaModel
+
+@{
+    ViewBag.Title = "Eliminar Sala";
+}
+
+<h2>Eliminar Sala</h2>
+
+<div>
+    <h4>Seguro que deseas eliminar esta sala?</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nombre
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Nombre
+        </dd>
+        <dt class="col-sm-2">
+            Capacidad
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Capacidad
+        </dd>
+        <dt class="col-sm-2">
+            Disponibilidad
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.Disponibilidad ? "Disponible" : "No Disponible")
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm("DeleteConfirmed", "Sala", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ID)
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-secondary" })
+    }
+</div>
